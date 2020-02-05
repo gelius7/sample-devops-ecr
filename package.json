@@ -1,0 +1,35 @@
+{
+  "name": "sample-node",
+  "version": "0.0.3",
+  "description": "Node.js sample app",
+  "main": "server.js",
+  "scripts": {
+    "build": "npm install -s",
+    "start": "node server.js",
+    "sonar": "sonar-scanner -Dsonar.sources=. -Dsonar.host.url=SONARQUBE -Dsonar.login=SONAR_TOKEN",
+    "test": "jest"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dd-trace": "^0.11.2",
+    "ejs": "^2.6.1",
+    "express": "^4.16.4",
+    "moment-timezone": "^0.5.23",
+    "newrelic": "^5.9.1",
+    "redis": "^2.8.0"
+  },
+  "devDependencies": {
+    "jest": "^24.7.1",
+    "jest-sonar-reporter": "^2.0.0",
+    "sonar-scanner": "^3.1.0",
+    "sonarqube-scanner": "^2.1.2"
+  },
+  "jest": {
+    "testResultsProcessor": "jest-sonar-reporter"
+  },
+  "jestSonar": {
+    "reportPath": "reports",
+    "reportFile": "test-reporter.xml",
+    "indent": 4
+  }
+}
