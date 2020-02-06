@@ -31,11 +31,7 @@ podTemplate(label: label, containers: [
     stage("Checkout") {
       container("builder") {
         try {
-          if (REPOSITORY_SECRET) {
-            git(url: REPOSITORY_URL, branch: BRANCH_NAME, credentialsId: REPOSITORY_SECRET)
-          } else {
-            git(url: REPOSITORY_URL, branch: BRANCH_NAME)
-          }
+          git(url: REPOSITORY_URL, branch: BRANCH_NAME)
         } catch (e) {
           butler.failure(SLACK_TOKEN_DEV, "Checkout")
           throw e
