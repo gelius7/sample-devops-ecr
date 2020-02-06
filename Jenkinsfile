@@ -2,7 +2,7 @@ def SERVICE_GROUP = "sample"
 def SERVICE_NAME = "devops"
 def IMAGE_NAME = "${SERVICE_GROUP}-${SERVICE_NAME}"
 def REPOSITORY_URL = "https://github.com/gelius7/sample-devops-ecr.git"
-def REPOSITORY_SECRET = ""
+//def REPOSITORY_SECRET = ""
 def SLACK_TOKEN_DEV = ""
 def SLACK_TOKEN_DQA = ""
 
