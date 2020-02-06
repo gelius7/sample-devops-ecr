@@ -2,7 +2,7 @@ def SERVICE_GROUP = "sample"
 def SERVICE_NAME = "devops"
 def IMAGE_NAME = "${SERVICE_GROUP}-${SERVICE_NAME}"
 def REPOSITORY_URL = "https://github.com/gelius7/sample-devops-ecr.git"
-//def REPOSITORY_SECRET = ""
+def REPOSITORY_SECRET = ""
 def SLACK_TOKEN_DEV = ""
 def SLACK_TOKEN_DQA = ""
 
@@ -31,7 +31,11 @@ podTemplate(label: label, containers: [
     stage("Checkout") {
       container("builder") {
         try {
-          git(url: REPOSITORY_URL, branch: BRANCH_NAME)
+          if (REPOSITORY_SECRET) {
+            git(url: REPOSITORY_URL, branch: BRANCH_NAME, credentialsId: REPOSITORY_SECRET)
+          } else {
+            git(url: REPOSITORY_URL, branch: BRANCH_NAME)
+          }
         } catch (e) {
           butler.failure(SLACK_TOKEN_DEV, "Checkout")
           throw e
