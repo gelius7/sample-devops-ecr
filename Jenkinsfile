@@ -24,15 +24,13 @@ podTemplate(label: label, containers: [
 ]) {
   node(label) {
     if (BRANCH_NAME == "master") {
-      stage("Build Image") {
-        "Build Charts": {
-          container("builder") {
-            try {
-              butler.build_chart()
-            } catch (e) {
-              butler.failure(SLACK_TOKEN_DEV, "Build Charts")
-              throw e
-            }
+      stage("Build Charts") {
+        container("builder") {
+          try {
+            butler.build_chart()
+          } catch (e) {
+            butler.failure(SLACK_TOKEN_DEV, "Build Charts")
+            throw e
           }
         }
       }
