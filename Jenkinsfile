@@ -61,8 +61,7 @@ podTemplate(label: label, containers: [
           "Build Docker": {
             container("builder") {
               try {
-                butler.build_image("759871273906.dkr.ecr.ap-northeast-2.amazonaws.com/opsnow/sample-node-ecr")
-//                butler.build_image()
+                butler.build_image()
               } catch (e) {
                 butler.failure(SLACK_TOKEN_DEV, "Build Docker")
                 throw e
