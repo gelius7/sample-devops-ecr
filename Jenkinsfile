@@ -23,62 +23,18 @@ podTemplate(label: label, containers: [
   hostPathVolume(mountPath: "/home/jenkins/.helm", hostPath: "/home/jenkins/.helm")
 ]) {
   node(label) {
-    stage("Prepare") {
-      container("builder") {
-        butler.prepare(IMAGE_NAME)
-      }
-    }
-    stage("Checkout") {
-      container("builder") {
-        try {
-          if (REPOSITORY_SECRET) {
-            git(url: REPOSITORY_URL, branch: BRANCH_NAME, credentialsId: REPOSITORY_SECRET)
-          } else {
-            git(url: REPOSITORY_URL, branch: BRANCH_NAME)
-          }
-        } catch (e) {
-          butler.failure(SLACK_TOKEN_DEV, "Checkout")
-          throw e
-        }
-
-        butler.scan("nodejs")
-      }
-    }
-    stage("Build") {
-      container("node") {
-        try {
-          butler.npm_build()
-          butler.success(SLACK_TOKEN_DEV, "Build")
-        } catch (e) {
-          butler.failure(SLACK_TOKEN_DEV, "Build")
-          throw e
-        }
-      }
-    }
     if (BRANCH_NAME == "master") {
       stage("Build Image") {
-        parallel(
-          "Build Docker": {
-            container("builder") {
-              try {
-                butler.build_image()
-              } catch (e) {
-                butler.failure(SLACK_TOKEN_DEV, "Build Docker")
-                throw e
-              }
-            }
-          },
-          "Build Charts": {
-            container("builder") {
-              try {
-                butler.build_chart()
-              } catch (e) {
-                butler.failure(SLACK_TOKEN_DEV, "Build Charts")
-                throw e
-              }
+        "Build Charts": {
+          container("builder") {
+            try {
+              butler.build_chart()
+            } catch (e) {
+              butler.failure(SLACK_TOKEN_DEV, "Build Charts")
+              throw e
             }
           }
-        )
+        }
       }
       stage("Deploy DEV") {
         container("builder") {
