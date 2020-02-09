@@ -23,6 +23,11 @@ podTemplate(label: label, containers: [
   hostPathVolume(mountPath: "/home/jenkins/.helm", hostPath: "/home/jenkins/.helm")
 ]) {
   node(label) {
+    stage("Prepare") {
+      container("builder") {
+        butler.prepare(IMAGE_NAME)
+      }
+    }
     if (BRANCH_NAME == "master") {
       stage("Build Charts") {
         container("builder") {
