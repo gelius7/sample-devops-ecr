@@ -46,7 +46,7 @@ podTemplate(label: label, containers: [
     stage("Build") {
       container("builder") {
         try {
-          butler.build_image("ecr", "", "", "ap-northeast-2", "759871273906")
+          butler.build_image("ecr", "", "", "ap-northeast-2", "759871273906", "sre-jj")
         } catch (e) {
           butler.failure(SLACK_TOKEN_DEV, "Build Docker")
           throw e
