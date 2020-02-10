@@ -37,7 +37,7 @@ podTemplate(label: label, containers: [
             throw e
         }
 
-        butler.set_version()
+        butler.set_version("latest")
         butler.set_registry("759871273906.dkr.ecr.ap-northeast-2.amazonaws.com/opsnow")
         butler.scan("nodejs")
       }
