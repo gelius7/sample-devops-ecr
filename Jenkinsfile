@@ -43,6 +43,16 @@ podTemplate(label: label, containers: [
         butler.set_repo_ver(IMAGE_REPO, IMAGE_VER)
       }
     }
+    stage("Build") {
+      container("builder") {
+        try {
+          butler.build_image("ecr", "", "", "ap-northeast-2", "759871273906")
+        } catch (e) {
+          butler.failure(SLACK_TOKEN_DEV, "Build Docker")
+          throw e
+        }
+      }
+    }
     if (BRANCH_NAME == "master") {
       stage("Build Charts") {
         container("builder") {
