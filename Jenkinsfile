@@ -44,7 +44,7 @@ podTemplate(label: label, containers: [
       }
     }
     stage("Build") {
-      container("builder") {
+      container("node") {
         try {
           butler.npm_build()
         } catch (e) {
