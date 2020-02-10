@@ -40,7 +40,7 @@ podTemplate(label: label, containers: [
         }
 
         butler.scan("nodejs")
-        butler.set_repo_ver(IMAGE_REPO, IMAGE_VER)
+//        butler.set_repo_ver(IMAGE_REPO, IMAGE_VER)
       }
     }
     stage("Build") {
