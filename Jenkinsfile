@@ -6,7 +6,7 @@ def REPOSITORY_SECRET = ""
 def SLACK_TOKEN_DEV = ""
 def SLACK_TOKEN_DQA = ""
 def IMAGE_REPO = "759871273906.dkr.ecr.ap-northeast-2.amazonaws.com/opsnow/${IMAGE_NAME}"
-def IMAGE_VER = "v0.0.1-20200204-1026"
+def IMAGE_VER = "v0.0.1-20200207-0126"
 
 //@Library("github.com/opsnow-tools/valve-butler")
 @Library("github.com/gelius7/valve-butler")
