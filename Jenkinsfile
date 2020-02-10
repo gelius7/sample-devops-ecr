@@ -28,6 +28,18 @@ podTemplate(label: label, containers: [
         butler.prepare(IMAGE_NAME)
       }
     }
+    stage("Checkout") {
+      container("builder") {
+        try {
+          git(url: REPOSITORY_URL, branch: BRANCH_NAME)
+        } catch (e) {
+          butler.failure(SLACK_TOKEN_DEV, "checkout")
+            throw e
+        }
+
+        butler.scan("nodejs")
+      }
+    }
     if (BRANCH_NAME == "master") {
       stage("Build Charts") {
         container("builder") {
