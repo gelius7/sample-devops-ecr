@@ -46,23 +46,37 @@ podTemplate(label: label, containers: [
     stage("Build") {
       container("builder") {
         try {
-          butler.build_image("ecr", "", "", "ap-northeast-2", "759871273906", "sre-jj")
+          butler.npm_build()
         } catch (e) {
-          butler.failure(SLACK_TOKEN_DEV, "Build Docker")
+          butler.failure(SLACK_TOKEN_DEV, "Build")
           throw e
         }
       }
     }
     if (BRANCH_NAME == "master") {
-      stage("Build Charts") {
-        container("builder") {
-          try {
-            butler.build_chart()
-          } catch (e) {
-            butler.failure(SLACK_TOKEN_DEV, "Build Charts")
-            throw e
+      stage("Build Image") {
+        parallel(
+            "Build Docker": {
+              container("builder") {
+                try {
+                  butler.build_image("ecr", "", "", "ap-northeast-2", "759871273906", "sre-jj")
+                } catch (e) {
+                  butler.failure(SLACK_TOKEN_DEV, "Build Docker")
+                  throw e
+                }
+              }
+            },
+            "Build Charts": {
+              container("builder") {
+                try {
+                  butler.build_chart()
+                } catch (e) {
+                  butler.failure(SLACK_TOKEN_DEV, "Build Charts")
+                  throw e
+                }
+              }
           }
-        }
+        )
       }
       stage("Deploy DEV") {
         container("builder") {
