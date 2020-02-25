@@ -41,6 +41,7 @@ podTemplate(label: label, containers: [
           throw e
         }
 
+        butler.set_registry("harbor-devops.dev.opsnow.com/harborsample")
         butler.scan("nodejs")
       }
     }
