@@ -42,6 +42,7 @@ podTemplate(label: label, containers: [
         }
 
         butler.set_registry("harbor-devops.dev.opsnow.com/hprivate")
+        butler.set_ecr_registry("759871273906.dkr.ecr.ap-northeast-2.amazonaws.com/opsnow")
         butler.scan("nodejs")
       }
     }
