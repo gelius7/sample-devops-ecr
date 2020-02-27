@@ -42,7 +42,6 @@ podTemplate(label: label, containers: [
         }
 
         butler.set_registry("harbor-devops.dev.opsnow.com/hprivate")
-        butler.set_image_repository("759871273906.dkr.ecr.ap-northeast-2.amazonaws.com/opsnow")
         butler.scan("nodejs")
       }
     }
@@ -86,7 +85,7 @@ podTemplate(label: label, containers: [
         container("builder") {
           try {
             // deploy(cluster, namespace, sub_domain, profile)
-            butler.deploy("skc2", "${SERVICE_GROUP}-dev", "${IMAGE_NAME}-dev", "dev")
+            butler.deploy("here", "${SERVICE_GROUP}-dev", "${IMAGE_NAME}-dev", "dev")
             butler.success(SLACK_TOKEN_DEV, "Deploy DEV")
           } catch (e) {
             butler.failure(SLACK_TOKEN_DEV, "Deploy DEV")
