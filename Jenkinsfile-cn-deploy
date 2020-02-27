@@ -14,7 +14,6 @@ properties([
   buildDiscarder(logRotator(daysToKeepStr: "60", numToKeepStr: "30"))
 ])
 podTemplate(label: label, containers: [
-//  containerTemplate(name: "builder", image: "quay.io/opsnow-tools/valve-builder", command: "cat", ttyEnabled: true, alwaysPullImage: true),
   containerTemplate(name: "builder", image: "opsnowtools/valve-builder:v0.2.18", command: "cat", ttyEnabled: true, alwaysPullImage: true),
 ], volumes: [
 ]) {
@@ -23,16 +22,6 @@ podTemplate(label: label, containers: [
       container("builder") {
 
         butler.prepare(IMAGE_NAME)
-//        //def url = "chartmuseum-devops.coruscant.opsnow.com"
-//        def list = butler.scan_charts()
-//
-//        echo "Select your Image"
-//        timeout(time: 5, unit: "MINUTES") {
-//          param = input(message:'Select Image ', parameters: [
-//              [$class: 'ChoiceParameterDefinition', choices: list, description: 'Select image for DEPLOY', name: 'sel_image']
-//          ])
-//        }
-//        image = param
 
         def version_list = butler.scan_charts_version(IMAGE_NAME)
         echo "Select your Image Version"
@@ -46,19 +35,20 @@ podTemplate(label: label, containers: [
         butler.prepare(IMAGE_NAME, image_version)
       }
     }
-//    stage("Proceed China PROD") {
-//      container("builder") {
-//        butler.proceed(SLACK_TOKEN_DQA, "Deploy PROD", "prod")
-//        timeout(time: 60, unit: "MINUTES") {
-//          input(message: "${butler.name} ${butler.version} to prod")
-//        }
-//      }
-//    }
+    stage("Proceed China PROD") {
+      container("builder") {
+        butler.proceed(SLACK_TOKEN_DQA, "Deploy PROD", "prod")
+        timeout(time: 60, unit: "MINUTES") {
+          input(message: "${butler.name} ${butler.version} to prod")
+        }
+      }
+    }
     stage("Deploy China PROD") {
       container("builder") {
         try {
+          // useECR, account_id, region, ecr_repo
+          butler.set_image_repository(true, "269758143319")
           // deploy(cluster, namespace, sub_domain, profile)
-          butler.set_account_id("269758143319")
           butler.deploy("skc2", "${SERVICE_GROUP}-prod", "${IMAGE_NAME}", "prod")
           butler.success([SLACK_TOKEN_DEV,SLACK_TOKEN_DQA], "Deploy PROD")
         } catch (e) {
